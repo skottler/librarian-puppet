@@ -26,8 +26,10 @@ module Librarian
           found_path = found_path(name)
           raise Error, "Path for #{name} doesn't contain a puppet module" if found_path.nil?
 
-          unless name.include? '/'
-            warn { "Invalid module name '#{name}', you should qualify it with 'ORGANIZATION/#{name}' for resolution to work correctly" }
+          unless self.class.to_s == 'Librarian::Puppet::Source::Git'
+            unless name.include? '/'
+              warn { "Invalid module name '#{name}', you should qualify it with 'ORGANIZATION/#{name}' for resolution to work correctly" }
+            end
           end
 
           install_path = environment.install_path.join(name.split('/').last)
